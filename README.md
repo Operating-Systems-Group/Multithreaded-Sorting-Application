@@ -1,9 +1,13 @@
 ## Multithreaded Sorting Application
 
 Names: Elizabeth Fassler (6336712), Khalid Fatani, and Asja Jennings
+
 Operating Systems Principles
+
 Programming Assignment 2
+
 1245-FIU01-COP-4610-SECRVDC-52544
+
 Professor Kiavash Bahreini
 
 
