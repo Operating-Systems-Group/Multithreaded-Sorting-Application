@@ -1,6 +1,6 @@
 ## Multithreaded Sorting Application
 
-Names: Elizabeth Fassler (6336712), Khalid Fatani, and Asja Jennings
+Names: Elizabeth Fassler (6336712), Khalid Fatani (6363026), and Asja Jennings
 
 Operating Systems Principles
 
