@@ -1,9 +1,18 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
 #include <pthread.h>
 
-// Declaring global arrays
-int unsorted[] = {6, 2, 0, 3, 8, 1, 7, 5, 9, 4};
-int sorted[10];
+#define SIZE				10
+#define NUMBER_OF_THREADS	3
+
+void *sorter(void *params);	/* thread that performs basic sorting algorithm */
+void *merger(void *params);	/* thread that performs merging of results */
+
+int list[SIZE] = {7,12,19,3,18,4,2,6,15,8};
+
+int result[SIZE];
 
 int* sort1(int* array) {
     
