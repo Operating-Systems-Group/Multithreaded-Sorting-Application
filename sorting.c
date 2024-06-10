@@ -14,8 +14,43 @@ int list[SIZE] = {7,12,19,3,18,4,2,6,15,8};
 
 int result[SIZE];
 
-int* sort1(int* array) {
+//used by sorting function
+void swap(int *a, int *b)
+{
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+//basic selection sort implementation for sorting array
+void sortArray(int array[], int length)
+{
+
+    // One by one move boundary of unsorted subarray
+    for (int i = 0; i < length-1; i++)
+    {
+        // Minimum element in unsorted array
+        int min = i;
+        for (int j = i+1; j < length; j++)
+          if (arr[j] < arr[min])
+            min = j;
+
+        // Swap the minimum with the first element
+           if(min != i)
+            swap(&arr[min], &arr[i]);
+    }
+}
+
+int* sort1(int* array){
+    int halfArray[5]; //will store half of the original unsorted array
     
+    for(int i =0; i < 5; i++){
+        halfArray[i] = array[i]; //copying values to new array
+    }
+    
+    sortArray(halfArray, 5); //sorting function, passing halfArray and length
+    
+    return halfArray;
 }
 
 int* sort2(int* array) {
