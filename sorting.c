@@ -4,8 +4,8 @@
 #include <time.h>
 #include <pthread.h>
 
-#define SIZE				10
-#define NUMBER_OF_THREADS	3
+#define SIZE 10
+#define NUMBER_OF_THREADS 3
 
 void *sorter(void *params);	/* thread that performs basic sorting algorithm */
 void *merger(void *params);	/* thread that performs merging of results */
