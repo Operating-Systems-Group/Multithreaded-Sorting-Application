@@ -1,4 +1,4 @@
-## Multithreaded Sorting Application
+## Multithreaded Sorting Application (Starter Code is on the bottom)
 
 Names: Elizabeth Fassler (6336712), Khalid Fatani (6363026), and Asja Jennings
 
@@ -29,3 +29,74 @@ Once all sorting threads have exited, the parent thread will output the sorted a
 - Create a text or Word file called Instructions.txt and write down the steps to run your application (your source codes should be error-free).
 - Add the recorded video file, the text/Word files, and your project, including the source codes, Makefile, etc., into a zip file.
 - Upload the zip file to Canvas before the deadline.
+
+
+
+
+### Code
+/******************************************************************************
+Basic pseudocode:
+
+Declare two global int arrays "unsorted" and "sorted".
+Create two sorting threads each with their own function "sort1" and "sort2".
+Create a merging thread with its own function "merge".
+
+In the main function: 
+Fill unsorted array with random integers (can be hardcoded to have a full array).
+Call both sorting functions, passing the global unsorted array, they will each return with a shorter sorted array.
+Call the merging function, passing the two sorted arrays to be put into the global sorted array.
+Output the sorted array to the console.
+*******************************************************************************/
+
+#include <stdio.h>
+#include <pthread.h>
+
+//declaring global arrays
+int unsorted[] = {6, 2, 0, 3, 8, 1, 7, 5, 9, 4};
+int sorted[10];
+
+
+int* sort1(int* array){
+    
+}
+
+int* sort2(int* array){
+    
+}
+
+int* merge(int* array1, int* array2 /*<-- these will be replaced by a struct parameter*/){
+    
+}
+
+
+int main()
+{
+    //creating separate threads for sorting and merging
+    pthread_t thread1;
+    pthread_t thread2;
+    pthread_t thread3;
+    
+    //creating threads and calling functions that each sort have of the array 
+    pthread_create(&thread1, NULL, sort1, &unsorted);
+    pthread_create(&thread2, NULL, sort1, &unsorted);
+    
+    //joining the sorting threads to ensure array is fully sorted before merge thread is used
+    pthread_join(thread1, NULL);
+    pthread_join(thread2, NULL);
+    
+    //creating merge thread and calling its function
+    pthread_create(&thread3, NULL, merge, /*since this function has two parameters, a struct will be needed and passed here*/);
+
+    //joining the merge thread
+    pthread_join(thread3, NULL);
+    
+    //printing the sorted array
+    printf("The sorted array:\n");
+    
+    for (int i =0; i < 10; i++){
+        printf("%d ", sorted[i]);
+    }
+    
+    return 0;
+}
+
