@@ -1,4 +1,4 @@
-## Multithreaded Sorting Application (Starter Code is on the bottom)
+## Multithreaded Sorting Application
 
 Names: Elizabeth Fassler (6336712), Khalid Fatani (6363026), and Asja Jennings
 
