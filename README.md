@@ -25,6 +25,13 @@ ________________________________________________________________________________
 make
 ```
 
+```sh
+gcc -Wall -pthread -c sorting.c -o sorting.o
+```
+
+```sh
+./sorting
+```
 
 ### Introduction
 
