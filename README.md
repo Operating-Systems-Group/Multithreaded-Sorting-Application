@@ -11,9 +11,11 @@ Programming Assignment 2
 Professor Kiavash Bahreini
 
 _____________________________________________________________________________________________________________
-Elizabeth Fassler: Created team project repository and readme file on Github
+Elizabeth Fassler: Created team project repository and readme file on Github.
+- Finished and updated sorting.c and Makefile.
 _____________________________________________________________________________________________________________
-Khalid Fatani: Added the basic pseudocode to the github project
+Khalid Fatani: Created the basic pseudocode for sorting.c in Github repository.
+- Created video for programming assignment 2.
 _____________________________________________________________________________________________________________
 
 ### Meetings
