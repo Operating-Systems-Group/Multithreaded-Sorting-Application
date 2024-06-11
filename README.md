@@ -10,6 +10,8 @@ Programming Assignment 2
 
 Professor Kiavash Bahreini
 
+Github Repository: https://github.com/Operating-Systems-Group/Multithreaded-Sorting-Application/tree/main
+
 _____________________________________________________________________________________________________________
 Elizabeth Fassler: Created team project repository and readme file on Github.
 - Finished and updated sorting.c and Makefile. Also created video.
