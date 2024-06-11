@@ -12,7 +12,7 @@ Professor Kiavash Bahreini
 
 _____________________________________________________________________________________________________________
 Elizabeth Fassler: Created team project repository and readme file on Github.
-- Finished and updated sorting.c and Makefile.
+- Finished and updated sorting.c and Makefile. Also created video.
 _____________________________________________________________________________________________________________
 Khalid Fatani: Created the basic pseudocode for sorting.c in Github repository.
 - Created video for programming assignment 2.
