@@ -1,137 +1,150 @@
 #include <pthread.h>
 #include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 
-#define SIZE 10
-#define NUMBER_OF_THREADS 3
+pthread_mutex_t lock;
+pthread_cond_t cond;
 
-// Thread performs basic sorting algorithm
-void *sorter(void *params);
-// Thread performs merging of results
-void *merger(void *params);
+// Define sorted array
+int arr[] = {7, 12, 19, 3, 18, 4, 2, 6, 15, 8};
+int arr_size = sizeof(arr) / sizeof(arr[0]);
+// Arrays to hold the two halves and the final sorted array
+int first[5];
+int half[5];
+int sort[10];
+int counter = 0;
 
-int list[SIZE] = {7,12,19,3,18,4,2,6,15,8};
+// Function declarations
+void *SortArrays(void *x);
+void *fullSort(void *x);
 
-int result[SIZE];
+// Function to sort the final array
+void *fullSort(void *x) {
+    int *num = (int *)x;
+    for (int i = 0; i < arr_size; i++) {
+        int j;
+        int temp = num[i];
+        for (j = i - 1; j >= 0; j--) {
+            if (num[j] > temp) {
+                num[j + 1] = num[j];
+            } else {
+                break;
+            }
+        }
+        num[j + 1] = temp;
+    }
+    return NULL;
+}
 
-typedef struct {
-    int from_index;
-    int to_index;
-} parameters;
+// Function to sort one half of the array
+void *SortArrays(void *x) {
+    int *num = (int *)x;
+    int size = arr_size / 2;
+    for (int i = 0; i < size; i++) {
+        int j;
+        int temp = num[i];
+        for (j = i - 1; j >= 0; j--) {
+            if (num[j] > temp) {
+                num[j + 1] = num[j];
+            } else {
+                break;
+            }
+        }
+        num[j + 1] = temp;
+    }
 
-int main (int argc, const char * argv[]) {
-    pthread_t workers[NUMBER_OF_THREADS];
+    // Lock the mutex and update the counter
+    pthread_mutex_lock(&lock);
+    counter++;
+    if (counter == 2) {
+        pthread_cond_signal(&cond);
+    }
+    pthread_mutex_unlock(&lock);
 
-    // Print unsorted array
-    printf("Unsorted array:\n");
-    for (int i = 0; i < SIZE; i++) {
-        printf("%d\t", list[i]);
+    return NULL;
+}
+
+int main() {
+    // Initialize the mutex and condition variable
+    pthread_mutex_init(&lock, NULL);
+    pthread_cond_init(&cond, NULL);
+
+    printf("Unsorted Array:\n");
+    for (int i = 0; i < arr_size; i++) {
+        printf("%d ", arr[i]);
     }
     printf("\n");
 
-    // Call malloc to allocate parameters
-    parameters *threadParameters = (parameters *) malloc (sizeof(parameters));
-    // Use parameters to specify the first half of the array
-    threadParameters->from_index = 0;
-    threadParameters->to_index = (SIZE/2) - 1;
-    // Create the first thread
-    pthread_create(&workers[0], 0, sorter, threadParameters);
+    int half_size = arr_size / 2;
 
-    // Establish the second sorting thread
-    threadParameters = (parameters *) malloc (sizeof(parameters));
-
-    threadParameters->from_index = SIZE/2;
-    threadParameters->to_index = SIZE - 1;
-
-    pthread_create(&workers[1], 0, sorter, threadParameters);
-
-    // Wait for 2 sorting threads to finish
-    pthread_join(workers[0],NULL);
-    pthread_join(workers[1],NULL);
-
-    // Establish the merge thread
-    threadParameters->from_index = 0;
-    threadParameters->to_index = SIZE/2;
-
-    // Create the third thread (merge thread)
-    pthread_create(&workers[2], 0, merger, threadParameters);
-
-    // Wait for the merge thread to finish
-    pthread_join(workers[2], NULL);
-
-    // Output the sorted array
-    printf("Sorted array:\n");
-    for (int i = 0; i < SIZE; i++) {
-        printf("%d\t", result[i]);
+    // Display the first half of the unsorted array
+    printf("First Half of Array Unsorted:\n");
+    for (int i = 0; i < arr_size / 2; i++) {
+        first[i] = arr[i];
+        printf("%d ", first[i]);
     }
-    printf("\n");
+
+    // Create the first thread to sort the first half
+    pthread_t pid1, pid2, pid3;
+
+    pthread_create(&pid1, NULL, SortArrays, first);
+    // Display the other half of the unsorted array
+    printf("\nOther Half of Array Unsorted:\n");
+    int count = 0;
+    for (int i = half_size; i < arr_size; i++) {
+        half[count] = arr[i];
+        printf("%d ", half[count]);
+        count++;
+    }
+    // Create the second thread to sort the other half
+    pthread_create(&pid2, NULL, SortArrays, half);
+
+    pthread_mutex_lock(&lock);
+    while (counter < 2) {
+        pthread_cond_wait(&cond, &lock);
+    }
+    pthread_mutex_unlock(&lock);
+
+    // Display the sorted first half
+    printf("\nSorted Half Array:\n");
+    for (int x = 0; x < half_size; x++) {
+        printf("%d ", first[x]);
+    }
+
+    // Display the sorted other half
+    printf("\nOther Sorted Half Array:\n");
+    for (int x = 0; x < half_size; x++) {
+        printf("%d ", half[x]);
+    }
+
+    // Merge the two sorted halves into the final array
+    for (int x = 0; x < half_size; x++) {
+        sort[x] = first[x];
+    }
+
+    int q = 0;
+    for (int x = half_size; x < arr_size; x++) {
+        sort[x] = half[q];
+        q++;
+    }
+
+    // Create a thread to sort the merged array
+    pthread_create(&pid3, NULL, fullSort, sort);
+    pthread_join(pid3, NULL);
+
+    // Display the sorted array
+    printf("\nSorted New Array:\n");
+    for (int i = 0; i < arr_size; i++) {
+        printf("%d ", sort[i]);
+    }
+
+    pthread_mutex_destroy(&lock);
+    pthread_cond_destroy(&cond);
 
     return 0;
 }
 
-// Swap function
-void swap(int *a, int *b) {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-
-// Sorting thread
-void *sorter(void *params)
-{
-    parameters* p = (parameters *)params;
-    int start = p->from_index;
-    int pSize = p->to_index + 1;
-
-    // Finds smallest value and swaps it with the first value
-    // in the unsorted part of the thread
-    for (int i = start; i < pSize - 1; i++) {
-        int min = i;
-        for (int j = i + 1; j < pSize; j++) {
-            if(list[j] < list[min])
-                min = j;
-        }
-        swap(&list[min], &list[i]);
-    }
-    pthread_exit(0);
-}
-
-// Merge thread
-void *merger(void *params) {
-    parameters* p = (parameters *)params;
-
-    // Merge two sorted sublists to the array result
-    int firstHalfOfArray = p->from_index;
-    int secondHalfOfArray = p->to_index;
-    int i = 0;
-
-    // Iterate through both arrays
-    while ((firstHalfOfArray < p->to_index) && (secondHalfOfArray < SIZE)) {
-        // Compare the smallest values, insert small in first half if < second half value
-        if (list[firstHalfOfArray] < list[secondHalfOfArray]) {
-            result[i] = list[firstHalfOfArray];
-            ++firstHalfOfArray;
-        }
-
-        else {
-            result[i] = list[secondHalfOfArray];
-            ++secondHalfOfArray;
-        }
-        ++i;
-    }
-    // Append last values of first half since they are smaller
-    while (firstHalfOfArray < p->to_index) {
-        result[i] = list[firstHalfOfArray];
-        ++firstHalfOfArray;
-        ++i;
-    }
-    // Append last values of second half since they are smaller
-    while (secondHalfOfArray < SIZE) {
-        result[i] = list[secondHalfOfArray];
-        ++secondHalfOfArray;
-        ++i;
-    }
 
     pthread_exit(0);
 }
