@@ -14,7 +14,7 @@ Github Repository: https://github.com/Operating-Systems-Group/Multithreaded-Sort
 
 _____________________________________________________________________________________________________________
 Elizabeth Fassler: Created team project repository and readme file on Github.
-- Finished and updated sorting.c and Makefile. Also created video.
+- Finished and updated sorting.c and Makefile.
 _____________________________________________________________________________________________________________
 Khalid Fatani: Created the basic pseudocode for sorting.c in Github repository.
 - Created video for programming assignment 2.
